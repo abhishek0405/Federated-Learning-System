@@ -193,7 +193,15 @@ def recvall(sock, n):
     return data
 
 
-
+def recvall1(sock):
+    data = []
+    while True:
+        packet = sock.recv(409600)
+        if not packet: break
+        data.append(packet)
+    data_arr = pickle.loads(b"".join(data))
+    print (data_arr)
+    return data_arr
 
 #wrapper function to receive data
 def recvall(sock):
@@ -210,16 +218,6 @@ def recvall(sock):
             break
     print("end fn")
     return data
-
-def recvall1(sock):
-    data = []
-    while True:
-        packet = sock.recv(409600)
-        if not packet: break
-        data.append(packet)
-    data_arr = pickle.loads(b"".join(data))
-    print (data_arr)
-    return data_arr
 
 # Create a socket object
 s = socket.socket()
@@ -299,7 +297,7 @@ while True:
 
     IMAGE_SIZE = [224, 224]
 
-    train_path = 'client1_train'
+    train_path = 'client2_train'
 
     vgg = VGG19(input_shape=IMAGE_SIZE + [3], weights='imagenet', include_top=False)
 
@@ -360,7 +358,7 @@ while True:
     #                                             class_mode = 'categorical')
 
     #scale the model weights and add to list
-    scaling_factor = 1
+    scaling_factor = 0.5
     #for now, not scaling weights, converting to list format for pickling
     scaled_weights = scale_model_weights(model.get_weights(),scaling_factor)
     #scaled_local_weight_list.append(scaled_weights)
